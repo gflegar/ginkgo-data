@@ -1,0 +1,75 @@
+(
+"Parameters: ";
+$system := ["P100-PCIe"][0];
+$num_blocks := [50000][0];
+$stage := ["generate", "apply"][0];
+$sizes := [1..32];
+
+
+$filter_result := function($dataset, $blocks) {
+($dataset[problem.num_blocks=$blocks and problem.block_size in $sizes].{
+    "block_size": problem.block_size,
+    "preconditioner": preconditioner
+})^(block_size)
+};
+
+$cg_set := content[dataset.system=$system]~>$filter_result($num_blocks);
+
+$extract_time := function($transformed, $component) {
+    $transformed.(
+        (((preconditioner~>$lookup("jacobi-" & block_size))~>$lookup($stage)).component)
+            ~>$lookup($component)
+    )
+};
+
+
+$extract_time2 := function($transformed, $component) {
+    $transformed.(preconditioner~>$lookup("jacobi-" & block_size)~>$lookup($stage))
+        .components~>$lookup($component)
+};
+
+$components := ($cg_set.preconditioner.`jacobi-1`~>$lookup($stage)).components~>$keys();
+$num_components := $components~>$count();
+
+$getColor := function($num_colors, $id) {
+  "hsl(" & $floor(360 * $id / $num_colors) & ",40%,55%)"
+};
+
+{
+    "add": $components,
+    "type": "bar",
+    "data": {
+        "labels": $sizes,
+        "datasets": $components~>$map(function ($v, $i) {{
+            "label": $v,
+            "data": ($cg_set~>$extract_time2($v)).($ / 1e9),
+            "borderColor": $getColor($num_components, $i),
+            "backgroundColor": $getColor($num_components, $i),
+            "fill": "false"
+        }})~>$append([])
+    },
+    "options": {
+        "title": {
+            "display": true,
+            "text": $system & " runtime breakdown of '" & $stage & "'"
+        },
+        "scales": {
+            "xAxes": [{
+                "stacked": true,
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Block size"
+                }
+            }],
+            "yAxes": [{
+                "stacked": true,
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Time [s]"
+                }
+            }]
+        },
+        "tooltips": { "mode": "index" }
+    }
+}
+)
