@@ -1,0 +1,44 @@
+(
+$filter_result := function($dataset, $blocks) {
+($dataset[problem.num_blocks=$blocks].{
+    "block_size": problem.block_size,
+    "preconditioner": preconditioner
+})^(block_size)
+};
+
+$num_blocks := 50000;
+$cg_set := content[dataset.system="P100-PCIe"]~>$filter_result($num_blocks);
+$no_cg_set := content[dataset.system="P100-PCIe-no-cg"]~>$filter_result($num_blocks);
+
+$extract_gen_performance := function($transformed) {
+    $transformed.(
+        2 * (block_size~>$power(3)) * $num_blocks /
+        (preconditioner~>$lookup("jacobi-" & block_size)).generate.components.generate
+    )
+};
+
+$cg_gen := $cg_set~>$extract_gen_performance();
+$no_cg_gen := $no_cg_set~>$extract_gen_performance();
+{
+    "type": "line",
+    "data": {
+        "labels": [1..32],
+        "datasets": [
+            {
+                "label": "cooperative groups API",
+                "data": $cg_gen,
+                "borderColor": "hsl(120,55%,60%)",
+                "backgroundColor": "hsl(120,55%,60%)",
+                "fill": "false"
+            },
+            {
+                "label": "low-level API",
+                "data": $no_cg_gen,
+                "borderColor": "hsl(0,55%,60%)",
+                "backgroundColor": "hsl(0,55%,60%)",
+                "fill": "false"
+            }
+        ]
+    }
+}
+)
