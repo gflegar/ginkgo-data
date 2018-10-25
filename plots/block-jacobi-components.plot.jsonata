@@ -1,4 +1,20 @@
 (
+"Parameters: ";
+$system := ["P100-PCIe"][0];
+$num_blocks := [50000][0];
+$component := ["find_blocks", "generate", "simple_apply"][2];
+
+$stage := {
+    "find_blocks": "generate",
+    "generate": "generate",
+    "simple_apply": "apply"
+}~>$lookup($component);
+$flops := function($component, $num_blocks, $block_size) {
+    $component = "generate" ? (2 * ($block_size~>$power(3)) * $num_blocks) :
+    $component = "simple_apply" ? ( 2 * ($block_size~>$power(2)) * $num_blocks) :
+    (($block_size~>$power(2)) * $num_blocks)
+};
+
 $filter_result := function($dataset, $blocks) {
 ($dataset[problem.num_blocks=$blocks].{
     "block_size": problem.block_size,
@@ -6,14 +22,13 @@ $filter_result := function($dataset, $blocks) {
 })^(block_size)
 };
 
-$num_blocks := 50000;
-$cg_set := content[dataset.system="P100-PCIe"]~>$filter_result($num_blocks);
-$no_cg_set := content[dataset.system="P100-PCIe-no-cg"]~>$filter_result($num_blocks);
+$cg_set := content[dataset.system=$system]~>$filter_result($num_blocks);
+$no_cg_set := content[dataset.system=($system & "-no-cg")]~>$filter_result($num_blocks);
 
 $extract_gen_performance := function($transformed) {
     $transformed.(
-        2 * (block_size~>$power(3)) * $num_blocks /
-        (preconditioner~>$lookup("jacobi-" & block_size)).generate.components.generate
+        ($component~>$flops($num_blocks, block_size)) /
+        (((preconditioner~>$lookup("jacobi-" & block_size))~>$lookup($stage)).components~>$lookup($component))
     )
 };
 
@@ -39,6 +54,28 @@ $no_cg_gen := $no_cg_set~>$extract_gen_performance();
                 "fill": "false"
             }
         ]
+    },
+    "options": {
+        "title": {
+            "display": true,
+            "text": $system & " performance of '" &
+                    $component & "' step of '" & $stage & "' stage"
+        },
+        "scales": {
+            "xAxes": [{
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Block size"
+                }
+            }],
+            "yAxes": [{
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "GFlop/s"
+                }
+            }]
+        },
+        "tooltips": { "mode": "index" }
     }
 }
 )
