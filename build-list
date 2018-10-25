@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+
+import json
+import sys
+from pathlib import Path
+
+
+def main():
+    if len(sys.argv) != 2:
+        sys.stderr.write("Usage: {} ROOTDIR\n".format(sys.argv[0]))
+        sys.exit(1)
+    dataset_list = [{ 'name': 'Result Summary', 'file': 'agregate.json'}]
+    for path in Path(sys.argv[1]).glob('*/*/*/*/*.json'):
+        dataset_list.append({
+            'name': '{}({}) {} {}/{}'.format(*path.parts),
+            'file': str(path)
+        })
+    json.dump(dataset_list, sys.stdout)
+
+
+if __name__ == "__main__":
+    main()
