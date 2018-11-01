@@ -1,6 +1,11 @@
 (
 "Parameters: ";
-$system := ["P100-PCIe"][0];
+$systems := {
+    "daint-P100-PCIe": "baseline",
+    "daint-P100-PCIe-cms": "column-major",
+    "daint-P100-PCIe-pi": "interleaved w/ padding",
+    "daint-P100-PCIe-i": "interleaved"
+};
 $num_blocks := [50000][0];
 $component := ["find_blocks", "generate", "simple_apply"][2];
 
@@ -9,6 +14,11 @@ $stage := {
     "generate": "generate",
     "simple_apply": "apply"
 }~>$lookup($component);
+
+$getColor := function($num_colors, $id) {
+  "hsl(" & $floor(360 * $id / $num_colors) & ",40%,55%)"
+};
+
 $flops := function($component, $num_blocks, $block_size) {
     $component = "generate" ? (2 * ($block_size~>$power(3)) * $num_blocks) :
     $component = "simple_apply" ? ( 2 * ($block_size~>$power(2)) * $num_blocks) :
@@ -22,38 +32,34 @@ $filter_result := function($dataset, $blocks) {
 })^(block_size)
 };
 
-$cg_set := content[dataset.system=$system]~>$filter_result($num_blocks);
-$no_cg_set := content[dataset.system=($system & "-no-cg")]~>$filter_result($num_blocks);
-
-$extract_gen_performance := function($transformed) {
+$extract_performance := function($transformed) {
     $transformed.(
         ($component~>$flops($num_blocks, block_size)) /
-        (((preconditioner~>$lookup("jacobi-" & block_size))~>$lookup($stage)).components~>$lookup($component))
+        (((preconditioner~>$lookup("jacobi-" & block_size))~>$lookup($stage))
+            .components~>$lookup($component))
     )
 };
 
-$cg_gen := $cg_set~>$extract_gen_performance();
-$no_cg_gen := $no_cg_set~>$extract_gen_performance();
+$dsize := $systems~>$keys()~>$count();
+$datasets := $systems~>$keys()~>$map(function ($v, $i) {
+    {
+        "label": $systems~>$lookup($v),
+        "data":  $$.content[dataset.system=$v]~>$filter_result($num_blocks)
+                    ~>$extract_performance(),
+        "borderColor": $getColor($dsize, $i),
+        "backgroundColor": $getColor($dsize, $i),
+        "fill": false
+    }
+});
+
 {
+    "metadata_": {
+        "systems": content.dataset.system.{ $: null }~>$keys()
+    },
     "type": "line",
     "data": {
         "labels": [1..32],
-        "datasets": [
-            {
-                "label": "cooperative groups API",
-                "data": $cg_gen,
-                "borderColor": "hsl(120,55%,60%)",
-                "backgroundColor": "hsl(120,55%,60%)",
-                "fill": "false"
-            },
-            {
-                "label": "low-level API",
-                "data": $no_cg_gen,
-                "borderColor": "hsl(0,55%,60%)",
-                "backgroundColor": "hsl(0,55%,60%)",
-                "fill": "false"
-            }
-        ]
+        "datasets": $datasets~>$append([])
     },
     "options": {
         "title": {
