@@ -9,6 +9,15 @@ $systems := {
     "daint-P100-PCIe-i-sp": "interleaved (SP)"
 };
 
+$element_sizes := {
+    "daint-P100-PCIe": 8,
+    "daint-P100-PCIe-cms": 8,
+    "daint-P100-PCIe-i": 8,
+    "daint-P100-PCIe-sp": 4,
+    "daint-P100-PCIe-cms-sp": 4,
+    "daint-P100-PCIe-i-sp": 4
+};
+
 $num_blocks := [50000][0];
 $component := ["find_blocks", "generate", "simple_apply"][2];
 
@@ -28,6 +37,12 @@ $flops := function($component, $num_blocks, $block_size) {
     (($block_size~>$power(2)) * $num_blocks)
 };
 
+$data := function($component, $num_blocks, $block_size, $esize) {
+    $component = "generate" ? (($block_size~>$power(2)) * $num_blocks * (4 + 3 *  $esize)) :
+    $component = "simple_apply" ? ((($block_size~>$power(2)) * $esize + 3 * $block_size * $esize) * $num_blocks) :
+    (($block_size~>$power(2)) * $num_blocks * (4 + 3 *  $esize))
+};
+
 $filter_result := function($dataset, $blocks) {
 ($dataset[problem.num_blocks=$blocks].{
     "block_size": problem.block_size,
@@ -43,12 +58,20 @@ $extract_performance := function($transformed) {
     )
 };
 
+$extract_data := function($transformed, $system) {
+    $transformed.(
+        ($component~>$data($num_blocks, block_size, $element_sizes~>$lookup($system))) /
+        (((preconditioner~>$lookup("jacobi-" & block_size))~>$lookup($stage))
+            .components~>$lookup($component))
+    )
+};
+
 $dsize := $systems~>$keys()~>$count();
 $datasets := $systems~>$keys()~>$map(function ($v, $i) {
     {
         "label": $systems~>$lookup($v),
         "data":  $$.content[dataset.system=$v]~>$filter_result($num_blocks)
-                    ~>$extract_performance(),
+                    ~>$extract_data($v),
         "borderColor": $getColor($dsize, $i),
         "backgroundColor": $getColor($dsize, $i),
         "fill": false
@@ -80,7 +103,7 @@ $datasets := $systems~>$keys()~>$map(function ($v, $i) {
             "yAxes": [{
                 "scaleLabel": {
                     "display": true,
-                    "labelString": "GFlop/s"
+                    "labelString": "Bandwidth [GB/s]"
                 }
             }]
         },
