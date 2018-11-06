@@ -1,11 +1,14 @@
 (
 "Parameters: ";
 $systems := {
-    "daint-P100-PCIe": "baseline",
-    "daint-P100-PCIe-cms": "column-major",
-    "daint-P100-PCIe-pi": "interleaved w/ padding",
-    "daint-P100-PCIe-i": "interleaved"
+    "daint-P100-PCIe": "baseline (DP)",
+    "daint-P100-PCIe-cms": "column-major (DP)",
+    "daint-P100-PCIe-i": "interleaved (DP)",
+    "daint-P100-PCIe-sp": "baseline (SP)",
+    "daint-P100-PCIe-cms-sp": "column-major (SP)",
+    "daint-P100-PCIe-i-sp": "interleaved (SP)"
 };
+
 $num_blocks := [50000][0];
 $component := ["find_blocks", "generate", "simple_apply"][2];
 
