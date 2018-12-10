@@ -43,515 +43,121 @@
             }
         },
         "preconditioner": {
-            "jacobi-1": {
+            "jacobi-2-0,0": {
                 "generate": {
                     "components": {
-                        "find_blocks": 5873587,
-                        "generate": 25944
+                        "find_blocks": 4058315,
+                        "generate": 26509
                     },
-                    "time": 5908767
+                    "time": 4092379
+                },
+                "apply": {
+                    "components": {
+                        "simple_apply": 10463
+                    },
+                    "time": 4182
+                },
+                "completed": true
+            },
+            "jacobi-2-0,1": {
+                "generate": {
+                    "components": {
+                        "find_blocks": 4058551,
+                        "generate": 27126,
+                        "initialize_precisions": 10155
+                    },
+                    "time": 4137359
+                },
+                "apply": {
+                    "components": {
+                        "simple_apply": 10592
+                    },
+                    "time": 4439
+                },
+                "completed": true
+            },
+            "jacobi-2-0,2": {
+                "generate": {
+                    "components": {
+                        "find_blocks": 4062629,
+                        "generate": 27384,
+                        "initialize_precisions": 10386
+                    },
+                    "time": 4138086
                 },
                 "apply": {
                     "components": {
                         "simple_apply": 10669
                     },
-                    "time": 4120
+                    "time": 4385
                 },
                 "completed": true
             },
-            "jacobi-2": {
+            "jacobi-2-1,0": {
                 "generate": {
                     "components": {
-                        "find_blocks": 4022302,
-                        "generate": 26360
+                        "find_blocks": 4060727,
+                        "generate": 27260,
+                        "initialize_precisions": 10024
                     },
-                    "time": 4059820
+                    "time": 4138390
                 },
                 "apply": {
                     "components": {
-                        "simple_apply": 10495
+                        "simple_apply": 10486
                     },
-                    "time": 4222
+                    "time": 4329
                 },
                 "completed": true
             },
-            "jacobi-3": {
+            "jacobi-2-1,1": {
                 "generate": {
                     "components": {
-                        "find_blocks": 4027968,
-                        "generate": 28784
+                        "find_blocks": 4059327,
+                        "generate": 27357,
+                        "initialize_precisions": 10257
                     },
-                    "time": 4605955
+                    "time": 4137240
                 },
                 "apply": {
                     "components": {
-                        "simple_apply": 11533
+                        "simple_apply": 10613
                     },
-                    "time": 4953
+                    "time": 4268
                 },
                 "completed": true
             },
-            "jacobi-4": {
+            "jacobi-2-2,0": {
                 "generate": {
                     "components": {
-                        "find_blocks": 3980705,
-                        "generate": 32212
+                        "find_blocks": 4060705,
+                        "generate": 27273,
+                        "initialize_precisions": 10140
                     },
-                    "time": 4287900
+                    "time": 4139898
                 },
                 "apply": {
                     "components": {
-                        "simple_apply": 11276
+                        "simple_apply": 10621
                     },
-                    "time": 4689
+                    "time": 4221
                 },
                 "completed": true
             },
-            "jacobi-5": {
+            "jacobi-2-autodetect": {
                 "generate": {
                     "components": {
-                        "find_blocks": 3931247,
-                        "generate": 42362
+                        "find_blocks": 4062790,
+                        "generate": 27100,
+                        "initialize_precisions": 10134
                     },
-                    "time": 4515163
+                    "time": 4142009
                 },
                 "apply": {
                     "components": {
-                        "simple_apply": 12809
+                        "simple_apply": 11050
                     },
-                    "time": 5947
-                },
-                "completed": true
-            },
-            "jacobi-6": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3948473,
-                        "generate": 43360
-                    },
-                    "time": 4534743
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 13107
-                    },
-                    "time": 5885
-                },
-                "completed": true
-            },
-            "jacobi-7": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3946210,
-                        "generate": 46401
-                    },
-                    "time": 4536160
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 13213
-                    },
-                    "time": 6379
-                },
-                "completed": true
-            },
-            "jacobi-8": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3977931,
-                        "generate": 56482
-                    },
-                    "time": 4580814
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 13299
-                    },
-                    "time": 6928
-                },
-                "completed": true
-            },
-            "jacobi-9": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3922388,
-                        "generate": 72274
-                    },
-                    "time": 4545694
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 14786
-                    },
-                    "time": 8694
-                },
-                "completed": true
-            },
-            "jacobi-10": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3930346,
-                        "generate": 83218
-                    },
-                    "time": 4556631
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 14572
-                    },
-                    "time": 8459
-                },
-                "completed": true
-            },
-            "jacobi-11": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4446936,
-                        "generate": 97819
-                    },
-                    "time": 5095606
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 17720
-                    },
-                    "time": 11665
-                },
-                "completed": true
-            },
-            "jacobi-12": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4448997,
-                        "generate": 90164
-                    },
-                    "time": 5098513
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 17947
-                    },
-                    "time": 12837
-                },
-                "completed": true
-            },
-            "jacobi-13": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4327463,
-                        "generate": 106959
-                    },
-                    "time": 4986804
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 20611
-                    },
-                    "time": 15115
-                },
-                "completed": true
-            },
-            "jacobi-14": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3927855,
-                        "generate": 90257
-                    },
-                    "time": 4584164
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 19926
-                    },
-                    "time": 14675
-                },
-                "completed": true
-            },
-            "jacobi-15": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3927090,
-                        "generate": 133211
-                    },
-                    "time": 4614088
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 21585
-                    },
-                    "time": 15718
-                },
-                "completed": true
-            },
-            "jacobi-16": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3947328,
-                        "generate": 120843
-                    },
-                    "time": 4621808
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 21729
-                    },
-                    "time": 15910
-                },
-                "completed": true
-            },
-            "jacobi-17": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3918513,
-                        "generate": 181225
-                    },
-                    "time": 4650901
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 24503
-                    },
-                    "time": 18963
-                },
-                "completed": true
-            },
-            "jacobi-18": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3922796,
-                        "generate": 160487
-                    },
-                    "time": 4637113
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 24976
-                    },
-                    "time": 19230
-                },
-                "completed": true
-            },
-            "jacobi-19": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3924494,
-                        "generate": 175320
-                    },
-                    "time": 4653711
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 25355
-                    },
-                    "time": 19515
-                },
-                "completed": true
-            },
-            "jacobi-20": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3932137,
-                        "generate": 251549
-                    },
-                    "time": 4731668
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 26884
-                    },
-                    "time": 21319
-                },
-                "completed": true
-            },
-            "jacobi-21": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3933336,
-                        "generate": 256249
-                    },
-                    "time": 4787468
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 27180
-                    },
-                    "time": 20973
-                },
-                "completed": true
-            },
-            "jacobi-22": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3944632,
-                        "generate": 224621
-                    },
-                    "time": 4765760
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 27758
-                    },
-                    "time": 22203
-                },
-                "completed": true
-            },
-            "jacobi-23": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3949567,
-                        "generate": 242101
-                    },
-                    "time": 4784392
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 28205
-                    },
-                    "time": 22694
-                },
-                "completed": true
-            },
-            "jacobi-24": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3957755,
-                        "generate": 260170
-                    },
-                    "time": 4813815
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 28931
-                    },
-                    "time": 23253
-                },
-                "completed": true
-            },
-            "jacobi-25": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3998320,
-                        "generate": 271702
-                    },
-                    "time": 4858172
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 30134
-                    },
-                    "time": 24381
-                },
-                "completed": true
-            },
-            "jacobi-26": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4012411,
-                        "generate": 301113
-                    },
-                    "time": 4893646
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 33594
-                    },
-                    "time": 30434
-                },
-                "completed": true
-            },
-            "jacobi-27": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4007866,
-                        "generate": 315884
-                    },
-                    "time": 4907867
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 32471
-                    },
-                    "time": 27145
-                },
-                "completed": true
-            },
-            "jacobi-28": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4005975,
-                        "generate": 336580
-                    },
-                    "time": 4932159
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 32123
-                    },
-                    "time": 26615
-                },
-                "completed": true
-            },
-            "jacobi-29": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 3995697,
-                        "generate": 340016
-                    },
-                    "time": 4928793
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 32098
-                    },
-                    "time": 26469
-                },
-                "completed": true
-            },
-            "jacobi-30": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4012080,
-                        "generate": 367550
-                    },
-                    "time": 4960895
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 33108
-                    },
-                    "time": 27391
-                },
-                "completed": true
-            },
-            "jacobi-31": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4015231,
-                        "generate": 380840
-                    },
-                    "time": 5002717
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 36325
-                    },
-                    "time": 32024
-                },
-                "completed": true
-            },
-            "jacobi-32": {
-                "generate": {
-                    "components": {
-                        "find_blocks": 4026052,
-                        "generate": 387726
-                    },
-                    "time": 5010866
-                },
-                "apply": {
-                    "components": {
-                        "simple_apply": 32499
-                    },
-                    "time": 26449
+                    "time": 4113
                 },
                 "completed": true
             }
