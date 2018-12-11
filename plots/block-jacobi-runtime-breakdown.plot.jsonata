@@ -1,57 +1,66 @@
 (
 "Parameters: ";
-$system := ["P100-PCIe"][0];
+$cases := [
+    {"label": "full", "system": "juwels-V100-SXM2-adaptive", "variant": "0,0" },
+    {"label": "adaptive", "system": "juwels-V100-SXM2-adaptive", "variant": "autodetect" }
+];
 $num_blocks := [50000][0];
 $stage := ["generate", "apply"][0];
 $sizes := [1..32];
 
-
-$filter_result := function($dataset, $blocks) {
-($dataset[problem.num_blocks=$blocks and problem.block_size in $sizes].{
-    "block_size": problem.block_size,
-    "preconditioner": preconditioner
-})^(block_size)
-};
-
-$cg_set := content[dataset.system=$system]~>$filter_result($num_blocks);
-
-$extract_time := function($transformed, $component) {
-    $transformed.(
-        (((preconditioner~>$lookup("jacobi-" & block_size))~>$lookup($stage)).component)
-            ~>$lookup($component)
-    )
-};
-
-
-$extract_time2 := function($transformed, $component) {
-    $transformed.(preconditioner~>$lookup("jacobi-" & block_size)~>$lookup($stage))
-        .components~>$lookup($component)
-};
-
-$components := ($cg_set.preconditioner.`jacobi-1`~>$lookup($stage)).components~>$keys();
-$num_components := $components~>$count();
-
+"Utilities";
 $getColor := function($num_colors, $id) {
   "hsl(" & $floor(360 * $id / $num_colors) & ",40%,55%)"
 };
 
-{
-    "add": $components,
-    "type": "bar",
-    "data": {
+$filter_data := function($dataset) {
+    ($cases~>$map(function($v, $i) {(
+        $dataset[
+                dataset.system=$v.system and
+                problem.num_blocks=$num_blocks and
+                problem.block_size in $sizes].(
+            $bsize := problem.block_size;
+            (preconditioner
+                ~>$lookup("jacobi-" & $bsize & "-" & $v.variant)
+                ~>$lookup($stage)
+            ).components~>$each(function ($v2, $k) {({
+                "group": $i,
+                "label": $v.label,
+                "component": $k,
+                "block_size": $bsize,
+                "time": $v2
+            })})
+        )
+    )})).*
+};
+
+$transform := function($data) {(
+    $systems := $data{label & ": " & component: null} ~> $keys();
+    {
         "labels": $sizes,
-        "datasets": $components~>$map(function ($v, $i) {{
-            "label": $v,
-            "data": ($cg_set~>$extract_time2($v)).($ / 1e9),
-            "borderColor": $getColor($num_components, $i),
-            "backgroundColor": $getColor($num_components, $i),
-            "fill": "false"
-        }})~>$append([])
-    },
+        "datasets": $systems ~> $map(function ($v, $i) {(
+            $f := $data[label & ": " & component = $v];
+            $color := $getColor($systems ~> $count(), $i);
+            {
+                "label": $v,
+                "data": ($f^(block_size)).(time / 1e6),
+                "borderColor": $color,
+                "backgroundColor": $color,
+                "stack": $f[0].group
+            }
+        )}) ~> $append([])
+    }
+)};
+
+$data := content~>$filter_data()~>$transform();
+
+{
+    "type": "bar",
+    "data": $data,
     "options": {
         "title": {
             "display": true,
-            "text": $system & " runtime breakdown of '" & $stage & "'"
+            "text": "Runtime breakdown of '" & $stage & "'"
         },
         "scales": {
             "xAxes": [{
@@ -65,7 +74,7 @@ $getColor := function($num_colors, $id) {
                 "stacked": true,
                 "scaleLabel": {
                     "display": true,
-                    "labelString": "Time [s]"
+                    "labelString": "Time [us]"
                 }
             }]
         },
