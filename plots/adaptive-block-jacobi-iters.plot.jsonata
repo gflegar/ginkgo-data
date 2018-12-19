@@ -1,0 +1,52 @@
+(
+$data := content.{
+    "label": problem.name,
+    "jacobi": solver.`cg-jacobi`.recurrent_residuals~>$count(),
+    "adaptive-jacobi": solver.`cg-adaptive-jacobi`.recurrent_residuals~>$count()
+}^(label);
+
+{
+    "type": "bar",
+    "data": {
+        "labels": $data.label,
+        "datasets": [
+            {
+                "label": "jacobi",
+                "data": $data.jacobi,
+                "backgroundColor": "hsl(0,55%,45%)",
+                "borderColor": "hsl(0,55%,45%)"
+            },
+            {
+                "label": "adaptive jacobi",
+                "data": $data.`adaptive-jacobi`,
+                "backgroundColor": "hsl(120,55%,45%)",
+                "borderColor": "hsl(120,55%,45%)"
+            }
+        ]
+    },
+    "options": {
+        "title": {
+            "display": true,
+            "text": "Block-Jacobi preconditioned CG convergence"
+        },
+        "scales": {
+            "xAxes": [{
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Problem"
+                },
+                "ticks": {
+                    "autoSkip": false
+                }
+            }],
+            "yAxes": [{
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "#iterations"
+                }
+            }]
+        },
+        "tooltips": { "mode": "index" }
+    }
+}
+)
