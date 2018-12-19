@@ -1,0 +1,85 @@
+(
+
+$count_prec := function($data, $prec) {
+    $data.solver.`cg-adaptive-jacobi`.preconditioner.(
+        $sum(block_precisions.($ = $prec ? 1 : 0)) /
+        $count(block_precisions))
+};
+
+$sorted := content^(problem.name);
+
+$data := {
+    "labels": $sorted.problem.name,
+    "datasets": [
+        {
+            "label": "double",
+            "count": $count_prec($sorted, 0),
+            "color": "hsl(0,55%,45%)"
+        },
+        {
+            "label": "single",
+            "count": $count_prec($sorted, 1),
+            "color": "hsl(60,55%,45%)"
+        },
+        {
+            "label": "half",
+            "count": $count_prec($sorted, 2),
+            "color": "hsl(120,55%,45%)"
+        },
+        {
+            "label": "11,20",
+            "count": $count_prec($sorted, 16),
+            "color": "hsl(180,55%,45%)"
+        },
+        {
+            "label": "11,4",
+            "count": $count_prec($sorted, 32),
+            "color": "hsl(240,55%,45%)"
+        },
+        {
+            "label": "8,7",
+            "count": $count_prec($sorted, 17),
+            "color": "hsl(300,55%,45%)"
+        }
+    ]
+}^(label);
+
+{
+    "type": "bar",
+    "data": {
+        "labels": $data.labels,
+        "datasets": $data.datasets.{
+            "label": label,
+            "data": count,
+            "borderColor": color,
+            "backgroundColor": color
+        }
+    },
+    "options": {
+        "title": {
+            "display": true,
+            "text": "Block-Jacobi preconditioned CG convergence"
+        },
+        "scales": {
+            "xAxes": [{
+                "stacked": true,
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "Problem"
+                },
+                "ticks": {
+                    "autoSkip": false
+                }
+            }],
+            "yAxes": [{
+                "stacked": true,
+                "scaleLabel": {
+                    "display": true,
+                    "labelString": "#iterations"
+                }
+            }]
+        },
+        "tooltips": { "mode": "index" }
+    }
+}
+)
