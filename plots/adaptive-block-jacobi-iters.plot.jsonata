@@ -1,9 +1,10 @@
 (
 $data := content.{
+    "id": problem.id,
     "label": problem.name,
     "jacobi": solver.`cg-jacobi`.recurrent_residuals~>$count(),
     "adaptive-jacobi": solver.`cg-adaptive-jacobi`.recurrent_residuals~>$count()
-}^(label);
+}^(id);
 
 {
     "type": "bar",
