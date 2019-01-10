@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+
+import json
+import sys
+from pathlib import PurePath
+
+
+def main():
+    if (len(sys.argv)) != 1:
+        sys.stderr.write("Usage: {}\n".format(sys.argv[0]))
+        sys.exit(1)
+    properties = { 'file', 'problem', 'spmv', 'preconditioner', 'optimal' }
+    datasets = json.load(sys.stdin)
+    result = []
+    for dataset in datasets:
+        if dataset['file'] == 'agregate.json':
+            continue
+        try:
+            with open(dataset['file'], 'r') as f:
+                data = json.load(f)
+            parts = PurePath(dataset['file']).parts
+            for item in data:
+                agregate = { k : item[k]
+                    for k in item.keys() & properties }
+                agregate['dataset'] = {
+                    'system': parts[0],
+                    'executor': parts[1],
+                    'provider': parts[2],
+                    'collection': parts[3],
+                    'problem': parts[4]
+                }
+                result.append(agregate)
+        except:
+            pass
+    json.dump(result, sys.stdout)
+
+
+if __name__ == "__main__":
+    main()
