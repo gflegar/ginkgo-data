@@ -1,0 +1,186 @@
+[
+    {
+        "filename": "/tmp/block-diagonal/42000-12.mtx",
+        "problem": {
+            "collection": "generated",
+            "group": "block-diagonal",
+            "name": "42000-12",
+            "type": "block-diagonal",
+            "real": true,
+            "binary": false,
+            "2d3d": false,
+            "posdef": false,
+            "psym": 1,
+            "nsym": 0,
+            "kind": "artificially generated problem",
+            "num_blocks": 42000,
+            "block_size": 12,
+            "row_distribution": {
+                "min": 12,
+                "q1": 12.0,
+                "median": 12.0,
+                "q3": 12.0,
+                "max": 12,
+                "mean": 12.0,
+                "variance": 0.0,
+                "skewness": 0.0,
+                "kurtosis": 0.0,
+                "hyperskewness": 0.0,
+                "hyperflatness": 0.0
+            },
+            "col_distribution": {
+                "min": 12,
+                "q1": 12.0,
+                "median": 12.0,
+                "q3": 12.0,
+                "max": 12,
+                "mean": 12.0,
+                "variance": 0.0,
+                "skewness": 0.0,
+                "kurtosis": 0.0,
+                "hyperskewness": 0.0,
+                "hyperflatness": 0.0
+            }
+        },
+        "preconditioner": {
+            "jacobi-12-0,0": {
+                "generate": {
+                    "components": {
+                        "allocate": 403095,
+                        "free": 1744216,
+                        "jacobi::find_blocks#4": 55363004,
+                        "jacobi::generate#9": 1018702
+                    },
+                    "time": 60158143
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 118076
+                    },
+                    "time": 110546
+                },
+                "completed": true
+            },
+            "jacobi-12-0,1": {
+                "generate": {
+                    "components": {
+                        "allocate": 450401,
+                        "copy": 13313,
+                        "free": 1764878,
+                        "jacobi::find_blocks#4": 55341451,
+                        "jacobi::generate#9": 1023485,
+                        "jacobi::initialize_precisions#2": 24562
+                    },
+                    "time": 58881864
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 91558
+                    },
+                    "time": 84411
+                },
+                "completed": true
+            },
+            "jacobi-12-0,2": {
+                "generate": {
+                    "components": {
+                        "allocate": 435623,
+                        "copy": 12482,
+                        "free": 1765794,
+                        "jacobi::find_blocks#4": 55341926,
+                        "jacobi::generate#9": 935216,
+                        "jacobi::initialize_precisions#2": 24528
+                    },
+                    "time": 59887005
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 85052
+                    },
+                    "time": 77638
+                },
+                "completed": true
+            },
+            "jacobi-12-1,0": {
+                "generate": {
+                    "components": {
+                        "allocate": 442315,
+                        "copy": 13118,
+                        "free": 1763438,
+                        "jacobi::find_blocks#4": 55346558,
+                        "jacobi::generate#9": 1019341,
+                        "jacobi::initialize_precisions#2": 25659
+                    },
+                    "time": 59071018
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 88163
+                    },
+                    "time": 81726
+                },
+                "completed": true
+            },
+            "jacobi-12-1,1": {
+                "generate": {
+                    "components": {
+                        "allocate": 440345,
+                        "copy": 12928,
+                        "free": 1771835,
+                        "jacobi::find_blocks#4": 55344905,
+                        "jacobi::generate#9": 940192,
+                        "jacobi::initialize_precisions#2": 24812
+                    },
+                    "time": 59799355
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 85288
+                    },
+                    "time": 77737
+                },
+                "completed": true
+            },
+            "jacobi-12-2,0": {
+                "generate": {
+                    "components": {
+                        "allocate": 443894,
+                        "copy": 13061,
+                        "free": 1763216,
+                        "jacobi::find_blocks#4": 55341262,
+                        "jacobi::generate#9": 938360,
+                        "jacobi::initialize_precisions#2": 24343
+                    },
+                    "time": 58897582
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 85400
+                    },
+                    "time": 77892
+                },
+                "completed": true
+            },
+            "jacobi-12-autodetect": {
+                "generate": {
+                    "components": {
+                        "allocate": 431929,
+                        "copy": 12584,
+                        "free": 1757988,
+                        "jacobi::find_blocks#4": 55343889,
+                        "jacobi::generate#9": 2161209,
+                        "jacobi::initialize_precisions#2": 25307
+                    },
+                    "time": 60163834
+                },
+                "apply": {
+                    "components": {
+                        "jacobi::simple_apply#8": 85237
+                    },
+                    "time": 77741
+                },
+                "completed": true
+            }
+        }
+    }
+]
