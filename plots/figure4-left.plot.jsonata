@@ -1,0 +1,135 @@
+(
+"Parameters: ";
+$systems := [
+    {"id": "tintorrum-P100-PCIe-v1", "label": "r-maj + seq" },
+    {"id": "tintorrum-P100-PCIe-v2", "label": "c-maj + seq" },
+    {"id": "tintorrum-P100-PCIe-v3", "label": "c-maj + b-inter" }
+];
+$num_blocks := [50000][0];
+$component := [
+    "find_blocks",
+    "generate",
+    "simple_apply"
+][1];
+$plot_kind := ["performance", "bandwidth"][0];
+
+"Constants: ";
+
+$stage := {
+    "find_blocks": "generate",
+    "generate": "generate",
+    "simple_apply": "apply"
+}~>$lookup($component);
+
+"Utility functions: ";
+
+$getColor := function($num_colors, $id) {
+  "hsl(" & $floor(360 * $id / $num_colors) & ",40%,55%)"
+};
+
+$total_flops := function($component, $num_blocks, $block_size) {
+    $component = "generate" ? (2 * ($block_size~>$power(3)) * $num_blocks) :
+    $component = "simple_apply" ? ( 2 * ($block_size~>$power(2)) * $num_blocks) :
+    (($block_size~>$power(2)) * $num_blocks)
+};
+
+$total_data := function($component, $num_blocks, $block_size) {
+    $component = "generate" ? 
+        (($block_size~>$power(2)) * $num_blocks * (4 + 8 + 8)) :
+    $component = "jacobi::simple_apply#9" ?
+        ((($block_size~>$power(2)) * 8 + 2 * $block_size * 8) * $num_blocks) :
+    (($block_size~>$power(2)) * $num_blocks * (4 + 8))
+};
+
+"Filter out only preconditioner-related data";
+$filter_result := function($dataset, $blocks) {
+($dataset[problem.num_blocks=$blocks].{
+    "block_size": problem.block_size,
+    "preconditioner": preconditioner,
+    "system": dataset.system 
+})^(block_size)
+};
+
+"Transform data to plottable result";
+$transform_data := function($filtered, $set, $count) {
+    (
+    $filtered[system = $set].(
+        $count($component, $num_blocks, block_size) /
+        ((preconditioner~>$lookup("jacobi-" & block_size)
+            ~>$lookup($stage))
+            .components~>$lookup($component))
+    );
+    )
+};
+
+$count_function := $plot_kind = "bandwidth" ? $total_data : $total_flops;
+$ylabel := $plot_kind = "bandwidth" ? "GB/s" : "GFlop/s";
+
+$dsize := $systems~>$count();
+$filtered := $$.content[dataset.system in ($systems.id)]~>$filter_result($num_blocks);
+
+$meta := content.dataset.system.{ $: null }~>$keys();
+
+$plot_type := "bar";
+
+$data := {
+    "labels": [1..32],
+    "datasets": $systems~>$map(function ($v, $i) {
+        {
+            "label": $v.label,
+            "data":  $filtered~>$transform_data($v.id, $count_function),
+            "borderColor": $getColor($dsize, $i),
+            "backgroundColor": $getColor($dsize, $i),
+            "fill": false
+        }
+    })
+};
+
+$font_size := 16;
+
+$options := {
+    "devicePixelRatio": 1,
+    "title": {
+        "display": false,
+        "fontSize": $font_size,
+        "text": $system & " " & $plot_kind & " of '" &
+                $component & "' step of '" & $stage & "' stage"
+    },
+    "legend": {
+        "labels": {
+            "fontSize": $font_size
+        }
+    },
+    "scales": {
+        "xAxes": [{
+            "scaleLabel": {
+                "display": true,
+                "fontSize": $font_size,
+                "labelString": "Block size"
+            },
+            "ticks": {
+                "fontSize": $font_size
+            }
+        }],
+        "yAxes": [{
+            "scaleLabel": {
+                "display": true,
+                "fontSize": $font_size,
+                "labelString": $ylabel
+            },
+            "ticks": {
+                "fontSize": $font_size,
+                "beginAtZero": true
+            }
+        }]
+    },
+    "tooltips": { "mode": "index" }
+};
+
+{
+    "metadata_": $meta,
+    "type": $plot_type,
+    "data": $data,
+    "options": $options
+}
+)
