@@ -1,6 +1,6 @@
 (
 "Parameters: ";
-$system := "tintorrum-P100-PCIe-v5";
+$system := "summit-V100-SXM2-v5";
 $num_blocks := [50000][0];
 $component := [
     "jacobi::find_blocks#4",
@@ -96,7 +96,7 @@ $data := {
     })~>$append([{
             "label": "auto (short)",
             "data": (content[
-                    dataset.system = "tintorrum-P100-PCIe-v4" and
+                    dataset.system = "summit-V100-SXM2-v4" and
                     problem.num_blocks = $num_blocks]^(problem.block_size))
                 .(
                     $bs := problem.block_size;
