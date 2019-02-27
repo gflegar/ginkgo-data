@@ -58,6 +58,17 @@ $data := content[
                 "yAxisID": "plain-jacobi"
             },
             {
+                "label": "Time (no precond)",
+                "data": $data.(jacobi.time / plain.time),
+                "backgroundColor": "hsla(180,55%,45%,0%)",
+                "borderColor": "hsl(180,55%,45%)",
+                "borderWidth": 2,
+                "radius": 5,
+                "showLine": false,
+                "fill": false,
+                "yAxisID": "plain-jacobi"
+            },
+            {
                 "label": "CG converged?",
                 "data": $data.plain.(completed ? 0.9 : 15),
                 "backgroundColor": "hsl(0,0%,0%)",
