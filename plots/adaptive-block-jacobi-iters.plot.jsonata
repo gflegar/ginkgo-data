@@ -36,12 +36,39 @@ $get_alpha := function($d) {
         "labels": $data.label,
         "datasets": [
             {
+                "label": "Iterations (no precond)",
+                "data": $data.(jacobi.iterations / plain.iterations),
+                "pointBackgroundColor": "hsla(0,0%,100%,0%)",
+                "pointBorderColor": $data.("hsla(240,55%,45%," & $get_alpha($) & ")"),
+                "backgroundColor": "hsl(240,55%,45%)",
+                "borderColor": "hsl(240,55%,45%)",
+                "borderWidth": 1,
+                "pointStyle": "star",
+                "showLine": false,
+                "fill": false,
+                "yAxisID": "plain-jacobi"
+            },
+            {
+                "label": "Time (no precond)",
+                "data": $data.(jacobi.time / plain.time),
+                "pointBackgroundColor": "hsla(0,0%,0%,0%)",
+                "pointBorderColor": $data.("hsla(280,55%,45%," & $get_alpha($) & ")"),
+                "backgroundColor": "hsl(280,55%,45%)",
+                "borderColor": "hsl(280,55%,45%)",
+                "borderWidth": 1,
+                "pointStyle": "star",
+                "showLine": false,
+                "fill": false,
+                "yAxisID": "plain-jacobi"
+            },
+            {
                 "label": "Iterations (adaptive)",
                 "data": $data.(jacobi.iterations / `adaptive-jacobi`.iterations),
                 "pointBackgroundColor": $data.("hsla(0,55%,45%," & $get_alpha($) & ")"),
                 "pointBorderColor": $data.("hsla(0,55%,45%," & $get_alpha($) & ")"),
                 "backgroundColor": "hsl(0,55%,45%)",
                 "borderColor": "hsl(0,55%,45%)",
+                "radius": 4,
                 "showLine": false,
                 "fill": false
             },
@@ -52,34 +79,9 @@ $get_alpha := function($d) {
                 "pointBorderColor": $data.("hsla(120,55%,45%," & $get_alpha($) & ")"),
                 "backgroundColor": "hsl(120,55%,45%)",
                 "borderColor": "hsl(120,55%,45%)",
+                "radius": 4,
                 "showLine": false,
                 "fill": false
-            },
-            {
-                "label": "Iterations (no precond)",
-                "data": $data.(jacobi.iterations / plain.iterations),
-                "pointBackgroundColor": "hsla(0,0%,100%,0%)",
-                "pointBorderColor": $data.("hsla(240,55%,45%," & $get_alpha($) & ")"),
-                "backgroundColor": "hsl(0,0%,100%)",
-                "borderColor": "hsl(240,55%,45%)",
-                "borderWidth": 2,
-                "radius": 5,
-                "showLine": false,
-                "fill": false,
-                "yAxisID": "plain-jacobi"
-            },
-            {
-                "label": "Time (no precond)",
-                "data": $data.(jacobi.time / plain.time),
-                "pointBackgroundColor": "hsla(0,0%,0%,0%)",
-                "pointBorderColor": $data.("hsla(180,55%,45%," & $get_alpha($) & ")"),
-                "backgroundColor": "hsl(0,0%,100%)",
-                "borderColor": "hsl(180,55%,45%)",
-                "borderWidth": 2,
-                "radius": 5,
-                "showLine": false,
-                "fill": false,
-                "yAxisID": "plain-jacobi"
             },
             {
                 "label": "CG converged?",
